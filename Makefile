@@ -61,8 +61,7 @@ else ifeq ("$(region)","P")
 	ALL   := $(BUILD) $(TARGETS)
 else ifeq ("$(region)","*")
 	game  := dummy
-	# TODO: Add rmck when it works.
-	ALL   := rmce rmcj rmcp
+	ALL   := rmce rmcj rmck rmcp
 else
 	$(error 'region' is not 'E', 'J', 'K', 'P' or '*')
 endif
