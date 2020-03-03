@@ -55,6 +55,27 @@ subi r4,screenWidth,48
 subi r5,screenHeight,72
 bl methodDrawNumber
 
+# Draw Airtime
+lis r3,SpeedValue@ha
+lwz r3,0x1660(r3)
+subi r4,screenWidth,48
+subi r5,screenHeight,216
+bl methodDrawNumber
+
+# Draw MT
+lis r3,SpeedValue@ha
+lwz r3,0x1668(r3)
+subi r4,screenWidth,48
+subi r5,screenHeight,188
+bl methodDrawNumber
+
+# Draw Boost Timer
+lis r3,SpeedValue@ha
+lwz r3,0x1664(r3)
+subi r4,screenWidth,48
+subi r5,screenHeight,160
+bl methodDrawNumber
+
 1:
 
 # Stack cleanup
@@ -75,6 +96,7 @@ mulli r19,r0,4
 add r15,r15,r19
 lwz r15,0(r15)
 lwz r15,16(r15)
+lwz r11,16(r15)
 lwz r15,16(r15)
 lwz r3,playerDataUNK@l(r31)
 lis r19,SpeedCounter@ha
@@ -94,6 +116,41 @@ b 1f
 li r15,3
 1:
 stw r15,SpeedCounter@l(r19)
+
+# Airtime
+lhz r12, 0x21A(r11)
+stw r12, 0x1660(r19)
+
+# Boost Timers
+lhz r12, 0x110(r11) # Load Mushroom boost into r12
+cmpwi r12, 0x0 # If not zero, we don't need to read Other Boost timers since mushroom boost is best, follow skip_other_boost branch
+bne- skip_other_boost
+
+lhz r12, 0x114(r11) # Load Trick boost into r12
+cmpwi r12, 0x0 # If not zero, we don't need to read MT Boost time, follow skip_MT_boost branch
+bne- skip_MT_boost
+
+lhz r12, 0x10C(r11)
+
+skip_MT_boost:
+skip_other_boost:
+stw r12, 0x1664(r19) # Store boost timers to 0x8001664
+
+# MT Charge values
+lhz r12, 0x14C (r11) # First Load the Orange MT value
+cmpwi r12, 0x0 # If not zero, we don't need to read Other MT values, follow skip_other_MTs branch
+bne- skip_other_MTs
+
+lhz r12, 0x100 (r11) # First Load the Orange MT value
+cmpwi r12, 0x0
+bne- skip_blue # If not zero, we don't need to read Blue MT, follow skip_blue branch
+
+lhz r12, 0xFE (r11) # If zero, read Blue MT instead of Orange MT
+
+skip_blue:
+skip_other_MTs:
+stw r12, 0x1668(r19)
+
 blr
 
 _overlayEnd:
