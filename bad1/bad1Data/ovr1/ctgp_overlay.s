@@ -96,7 +96,7 @@ mulli r19,r0,4
 add r15,r15,r19
 lwz r15,0(r15)
 lwz r15,16(r15)
-lwz r11,16(r15)
+lwz r11,16(r15) # Save pointer of r15 to r11 so we can use that later
 lwz r15,16(r15)
 lwz r3,playerDataUNK@l(r31)
 lis r19,SpeedCounter@ha
@@ -118,15 +118,15 @@ li r15,3
 stw r15,SpeedCounter@l(r19)
 
 # Airtime
-lhz r12, 0x21A(r11)
+lhz r12, 0x21A(r11) Load Airtime into r12 by using our saved pointer from r11
 stw r12, 0x1660(r19)
 
 # Boost Timers
-lhz r12, 0x110(r11) # Load Mushroom boost into r12
+lhz r12, 0x110(r11) # Load Mushroom boost into r12 by using our saved pointer from r11
 cmpwi r12, 0x0 # If not zero, we don't need to read Other Boost timers since mushroom boost is best, follow skip_other_boost branch
 bne- skip_other_boost
 
-lhz r12, 0x114(r11) # Load Trick boost into r12
+lhz r12, 0x114(r11) # Load Trick boost into r12 by using our saved pointer from r11
 cmpwi r12, 0x0 # If not zero, we don't need to read MT Boost time, follow skip_MT_boost branch
 bne- skip_MT_boost
 
@@ -137,11 +137,11 @@ skip_other_boost:
 stw r12, 0x1664(r19) # Store boost timers to 0x8001664
 
 # MT Charge values
-lhz r12, 0x14C (r11) # First Load the Orange MT value
+lhz r12, 0x14C (r11) # First Load the SSMT value by using our saved pointer from r11
 cmpwi r12, 0x0 # If not zero, we don't need to read Other MT values, follow skip_other_MTs branch
 bne- skip_other_MTs
 
-lhz r12, 0x100 (r11) # First Load the Orange MT value
+lhz r12, 0x100 (r11) # First Load the Orange MT value by using our saved pointer from r11
 cmpwi r12, 0x0
 bne- skip_blue # If not zero, we don't need to read Blue MT, follow skip_blue branch
 
