@@ -39,12 +39,46 @@ stw r4,0xde8(r3)
 bgt 1f
 
 # Drawing here!
+# Draw KM/H Image
 bl 0f
 .incbin "build/kmph.bin"
 0:
 mflr r7
 subi r3,screenWidth,88
 subi r4,screenHeight,48
+li r5, 40
+li r6, 15
+bl methodDrawImage
+
+# Draw Air Image(P-Wing)
+bl 0f
+.incbin "build/air.bin"
+0:
+mflr r7
+subi r3,screenWidth,88
+subi r4,screenHeight,216
+li r5, 40
+li r6, 15
+bl methodDrawImage
+
+# Draw MT image(spark)
+bl 0f
+.incbin "build/MT.bin"
+0:
+mflr r7
+subi r3,screenWidth,88
+subi r4,screenHeight,188
+li r5, 40
+li r6, 15
+bl methodDrawImage
+
+# Draw Boost Image(Mushroom)
+bl 0f
+.incbin "build/boost.bin"
+0:
+mflr r7
+subi r3,screenWidth,88
+subi r4,screenHeight,160
 li r5, 40
 li r6, 15
 bl methodDrawImage
@@ -118,7 +152,7 @@ li r15,3
 stw r15,SpeedCounter@l(r19)
 
 # Airtime
-lhz r12, 0x21A(r11) Load Airtime into r12 by using our saved pointer from r11
+lhz r12, 0x21A(r11) # Load Airtime into r12 by using our saved pointer from r11
 stw r12, 0x1660(r19)
 
 # Boost Timers
