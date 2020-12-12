@@ -55,10 +55,10 @@ bl 0f
 .incbin "build/air.bin"
 0:
 mflr r7
-subi r3,screenWidth,88
+subi r3,screenWidth,136
 subi r4,screenHeight,216
-li r5, 40
-li r6, 15
+li r5, 24
+li r6, 24
 bl methodDrawImage
 
 # Draw MT image(spark)
@@ -66,10 +66,10 @@ bl 0f
 .incbin "build/MT.bin"
 0:
 mflr r7
-subi r3,screenWidth,88
+subi r3,screenWidth,136
 subi r4,screenHeight,188
-li r5, 40
-li r6, 15
+li r5, 24
+li r6, 24
 bl methodDrawImage
 
 # Draw Boost Image(Mushroom)
@@ -77,10 +77,10 @@ bl 0f
 .incbin "build/boost.bin"
 0:
 mflr r7
-subi r3,screenWidth,88
+subi r3,screenWidth,136
 subi r4,screenHeight,160
-li r5, 40
-li r6, 15
+li r5, 24
+li r6, 24
 bl methodDrawImage
 
 lis r3,SpeedValue@ha
